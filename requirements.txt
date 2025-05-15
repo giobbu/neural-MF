@@ -5,4 +5,5 @@ keras==3.9.2
 tensorflow==2.16.2
 numpy==1.26.4
 matplotlib==3.9.2
-pytes==8.3.4
+pytest==8.3.4
+coverage==7.8.0
