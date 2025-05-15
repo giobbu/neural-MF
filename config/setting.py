@@ -9,8 +9,9 @@ class Config(BaseSettings):
     NUM_ROWS: int = 10000
     NUM_COLUMNS: int = 5
     # Missingness parameters
-    BLOCK_SIZE: int = 100
+    BLOCK_SIZE: int = 10
     SPLIT_RATIO: float = 0.5
+    SHOW_MISSING: bool = False
     # Model parameters
     LATENT_DIM: int = 10
     LR: float = 0.001
