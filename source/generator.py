@@ -7,5 +7,6 @@ def generate_synthetic_data(num_rows=1000, num_columns=10):
     for i in range(num_rows):
         for j in range(num_columns):
             data.append([i, j, random.uniform(0, 1)])
-    return pd.DataFrame(data, columns=["rowId", "columnId", "OBS"])
+    df = pd.DataFrame(data, columns=["rowId","columnId", "OBS"])
+    return df
     

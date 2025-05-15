@@ -11,7 +11,6 @@ import datetime
 import hashlib
 import os
 
-
 class NeuralALS:
     """
     Neural Alternating Least Squares (Neural ALS) for matrix factorization.
@@ -25,7 +24,6 @@ class NeuralALS:
         #self.mu = training_df.OBS.mean()
         self.N = training_df.rowId.max() + 1  # number of observations
         self.M = training_df.columnId.max() + 1  # number of variables
-        self.model = None
 
     def build_model(self, loss='mse', metrics=['mse'], learning_rate=0.01, reg=0.001):
         """
