@@ -6,6 +6,11 @@ from keras.models import Model
 from keras.layers import Input, Embedding, Dot, Add, Flatten
 from keras.regularizers import l2
 
+import tensorflow as tf
+import datetime
+import hashlib
+import os
+
 
 class NeuralALS:
     """
@@ -46,11 +51,17 @@ class NeuralALS:
         except Exception as e:
             print(f"Error building model: {e}")
 
-    def train(self, epochs=5, batch_size=128):
+    def train(self, epochs=5, batch_size=128, path_save_exp="logs/fit/"):
         """
         Train the matrix factorization model using the training data.
         """
         try:
+            # if path folder does not exist, create it
+            if not os.path.exists(path_save_exp):
+                os.makedirs(path_save_exp)
+            key = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+            log_dir = path_save_exp + hashlib.md5(key.encode()).hexdigest()
+            tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
             self.history = self.model.fit(x=[self.training_df.rowId.values, self.training_df.columnId.values],
                                         y=self.training_df.OBS.values, # - self.mu,
                                         epochs=epochs,
@@ -58,7 +69,8 @@ class NeuralALS:
                                         validation_data=(
                                             [self.validation_df.rowId.values, self.validation_df.columnId.values],
                                             self.validation_df.OBS.values # - self.mu
-                                            )
+                                            ),
+                                            callbacks=[tensorboard_callback]
                                         )
             return self.history
         except Exception as e:
