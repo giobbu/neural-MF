@@ -11,9 +11,9 @@ import datetime
 import hashlib
 import os
 
-class NeuralALS:
+class NeuralMF:
     """
-    Neural Alternating Least Squares (Neural ALS) for matrix factorization.
+    Neural Matrix Factorization.
     """
     def __init__(self, training_df, validation_df, K=10):
         assert isinstance(training_df, pd.DataFrame) and isinstance(validation_df, pd.DataFrame), \
@@ -21,10 +21,10 @@ class NeuralALS:
         self.training_df = training_df
         self.validation_df = validation_df
         self.K = K
-        #self.mu = training_df.OBS.mean()
         self.N = training_df.rowId.max() + 1  # number of observations
         self.M = training_df.columnId.max() + 1  # number of variables
-
+        self.mu = training_df.OBS.mean()  # mean of the observations
+        
     def build_model(self, loss='mse', metrics=['mse'], learning_rate=0.01, reg=0.001):
         """
         Build the matrix factorization model using Keras.
@@ -61,12 +61,12 @@ class NeuralALS:
             log_dir = path_save_exp + hashlib.md5(key.encode()).hexdigest()
             tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
             self.history = self.model.fit(x=[self.training_df.rowId.values, self.training_df.columnId.values],
-                                        y=self.training_df.OBS.values, # - self.mu,
+                                        y=self.training_df.OBS.values - self.mu,
                                         epochs=epochs,
                                         batch_size=batch_size,
                                         validation_data=(
                                             [self.validation_df.rowId.values, self.validation_df.columnId.values],
-                                            self.validation_df.OBS.values # - self.mu
+                                            self.validation_df.OBS.values - self.mu
                                             ),
                                             callbacks=[tensorboard_callback]
                                         )
@@ -79,7 +79,7 @@ class NeuralALS:
         Predict the validation data using the trained model.
         """
         try:
-            predictions = self.model.predict([test_df.rowId.values, test_df.columnId.values])# + self.mu
+            predictions = self.model.predict([test_df.rowId.values, test_df.columnId.values]) + self.mu
             df_predictions = self.create_df(predictions, test_df)
             return df_predictions
         except Exception as e:

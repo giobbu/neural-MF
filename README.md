@@ -1,1 +1,1 @@
-# neural-als
+# Neural Matrix Factorization

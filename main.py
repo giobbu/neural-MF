@@ -1,6 +1,6 @@
 from source.generator import generate_synthetic_data
 from source.missingness import create_block_missingness
-from source.model import NeuralALS
+from source.model import NeuralMF
 from source.utils import plot_filled_by_idx
 from source.helper import show_missing_values
 
@@ -20,18 +20,18 @@ def main():
         show_missing_values(df, training_df)
 
     # Initialize and build the model
-    neural_als = NeuralALS(training_df, validation_df, K=params.LATENT_DIM)
-    neural_als.build_model(learning_rate=params.LR,
+    neural_matrix_factor = NeuralMF(training_df, validation_df, K=params.LATENT_DIM)
+    neural_matrix_factor.build_model(learning_rate=params.LR,
                             reg=params.REG,
                             loss=params.LOSS,
                             metrics=params.METRICS
                             )
     # Train the model
-    _ = neural_als.train(epochs=params.EPOCHS,
+    _ = neural_matrix_factor.train(epochs=params.EPOCHS,
                          batch_size=params.BATCH_SIZE
                          )
     # Imputation
-    imputed_df = neural_als.fill(validation_df)
+    imputed_df = neural_matrix_factor.fill(validation_df)
     # Plot the training, validation and prediction data
     plot_filled_by_idx(training_df, validation_df, imputed_df, col_idx=params.COL_IDX)
 
