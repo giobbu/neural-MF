@@ -29,8 +29,12 @@ def load_data_processed(load_generator_data):
     """
     from config.setting import Config
     params = Config()
-    from source.missingness import create_block_missingness
+    from source.missingness import simulate_missingness
     df = load_generator_data
     # Create block missingness
-    training_df, validation_df = create_block_missingness(df, block_size=params.BLOCK_SIZE, split_ratio=params.SPLIT_RATIO)
+    training_df, validation_df = simulate_missingness(df,
+        split_ratio=params.SPLIT_RATIO,
+        block_missingness=params.BLOCK_MISSINGNESS,
+        block_size=params.BLOCK_SIZE
+    )
     return training_df, validation_df

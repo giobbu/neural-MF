@@ -1,5 +1,5 @@
 from source.generator import generate_synthetic_data
-from source.missingness import create_block_missingness
+from source.missingness import simulate_missingness
 from source.model import NeuralMF
 from source.utils import plot_filled_by_idx
 from source.helper import show_missing_values
@@ -12,12 +12,15 @@ def main():
     # Generate training and validation data
     df = generate_synthetic_data(num_rows=params.NUM_ROWS, num_columns=params.NUM_COLUMNS)
     
-    # Shuffle the DataFrame by blocks and Split the DataFrame into training and validation sets
-    training_df, validation_df = create_block_missingness(df, block_size=params.BLOCK_SIZE, split_ratio=params.SPLIT_RATIO)
+    # Simulate missingness in the DataFrame
+    training_df, validation_df = simulate_missingness(df,
+        split_ratio=params.SPLIT_RATIO,
+        block_missingness=params.BLOCK_MISSINGNESS,
+        block_size=params.BLOCK_SIZE
+    )
 
-    if params.SHOW_MISSING:
-        # Show the missing values in the DataFrame
-        show_missing_values(df, training_df)
+    # Show the missing values in the DataFrame
+    show_missing_values(df, training_df, params.SHOW_MISSING, params.BLOCK_SIZE, params.SPLIT_RATIO)
 
     # Initialize and build the model
     neural_matrix_factor = NeuralMF(training_df, validation_df, K=params.LATENT_DIM)
