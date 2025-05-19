@@ -1,0 +1,12 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+    image: app:latest
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    env_file:
+      - ./app/.env
+    volumes:
+      - ./app/data:/home/guest/app/data

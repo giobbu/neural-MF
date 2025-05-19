@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+# Set environment variables for UID and password
+ARG UID=1000
+ARG PASSWORD
+
+# Update and install basic tools
+RUN apt-get update && \
+    apt-get install -y sudo lsof nano passwd python3 python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements.txt and install dependencies early
+COPY ./app/requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+
+# Create guest user with UID 1000
+RUN useradd -m -u $UID guest && \
+    echo 'guest:$PASSWORD' | chpasswd && \
+    usermod -aG sudo guest
+
+# Copy the full app
+COPY ./app /home/guest/app
+
+# Set permissions for the application directory
+RUN chown -R guest:guest /home/guest/app
+
+# Set user to guest
+USER guest
+
+# Set the working directory
+WORKDIR /home/guest/app
