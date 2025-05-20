@@ -20,7 +20,7 @@ def main():
     )
 
     # Show the missing values in the DataFrame
-    show_missing_values(df, training_df, params.SHOW_MISSING, params.BLOCK_SIZE, params.SPLIT_RATIO)
+    show_missing_values(df, training_df, params.SHOW_MISSING, params.BLOCK_MISSINGNESS, params.BLOCK_SIZE, params.SPLIT_RATIO)
 
     # Initialize and build the model
     neural_matrix_factor = NeuralMF(training_df, validation_df, K=params.LATENT_DIM)
