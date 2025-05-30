@@ -4,13 +4,19 @@ Basic matrix factorization with Keras for missing data imputation.
 
 ## Missingness types
 ### Block-wise
-<img src="imgs/missing_values_block_100_split_0.85.png" style="vertical-align: middle; width: 500px; height: 500px;">
+<img src="imgs/missing_values_block_100_split_0.85.png" style="vertical-align: middle; width: 500px; height: 550px;">
 
 ### Point-wise
-<img src="imgs/missing_values_point_split_0.85.png" style="vertical-align: middle; width: 500px; height: 500px;">
+<img src="imgs/missing_values_point_split_0.85.png" style="vertical-align: middle; width: 500px; height: 550px;">
 
-## Neural-MF debugging and experimentation with Tensorboard
-Visualization for neural-MF experimentation:
+## Model Architecture with Netron
+Inspect model structure after saving in [Netron](https://netron.app/)
+
+<img src="imgs/neural-mf.png" style="vertical-align: middle; width: 500px; height: 400px;">
+
+## Debugging and experimentation with Tensorboard
+Visualization for neural-MF experimentation in [Tensorboard](https://www.tensorflow.org/tensorboard):
+
 ```bash
 tensorboard --logdir /path/to/logs/directory
 ```
