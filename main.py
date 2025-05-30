@@ -27,7 +27,8 @@ def main():
     neural_matrix_factor.build_model(learning_rate=params.LR,
                             reg=params.REG,
                             loss=params.LOSS,
-                            metrics=params.METRICS
+                            metrics=params.METRICS,
+                            save_path="save/model.keras"  # Path to save the model
                             )
     # Train the model
     _ = neural_matrix_factor.train(epochs=params.EPOCHS,

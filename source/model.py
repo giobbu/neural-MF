@@ -25,7 +25,7 @@ class NeuralMF:
         self.M = training_df.columnId.max() + 1  # number of variables
         self.mu = training_df.OBS.mean()  # mean of the observations
         
-    def build_model(self, loss='mse', metrics=['mse'], learning_rate=0.01, reg=0.001):
+    def build_model(self, loss='mse', metrics=['mse'], learning_rate=0.01, reg=0.001, save_path=None):
         """
         Build the matrix factorization model using Keras.
         """
@@ -44,6 +44,8 @@ class NeuralMF:
             x = Add()([x, u_bias, p_bias])  # x = x + u_bias + p_bias
             x = Flatten()(x)
             self.model = Model(inputs=[u, p], outputs=x)
+            if save_path is not None:
+                self.model.save(save_path)
             opt = keras.optimizers.Adam(learning_rate=learning_rate)
             self.model.compile(loss=loss, optimizer=opt, metrics=metrics)
         except Exception as e:
